@@ -1,8 +1,10 @@
-import { Button } from "@/components/ui/ui/button";
+import { BudgetForm } from "@/components/BudgetForm";
+
 
 export default function Home() {
   return (
-    <main>
-    </main>
+    <div>
+      <BudgetForm />
+    </div>
   )
 }
