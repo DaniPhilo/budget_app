@@ -12,7 +12,12 @@ const NavLink = ({ path, text }: NavLinkProps) => {
 
     return (
         <li>
-            <Link href={path} className={`p-2 ${pathName === path ? "bg-slate-400 text-white" : "bg-transparent"} rounded`}>{text}</Link>
+            <Link
+                href={path}
+                className={`p-1 ${pathName === path ? "border-b border-t border-zinc-500 text-zinc-400" : "bg-transparent"}`}
+            >
+                {text}
+            </Link>
         </li>
     )
 }
