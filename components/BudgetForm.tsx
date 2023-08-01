@@ -20,6 +20,8 @@ import { useForm, useFieldArray } from "react-hook-form"
 import { useState } from "react"
 import NewExpenseModal from "./NewExpenseModal"
 import { Label } from "./ui/label"
+import { addDoc, collection } from "firebase/firestore"
+import { db } from "@/firebase/config"
 
 const formSchema = z.object({
     rent: z.number(),
@@ -52,6 +54,7 @@ export function BudgetForm() {
 
     function onSubmit(values: z.infer<typeof formSchema>) {
         console.log(values);
+        // addDoc(collection(db, "budgets"), values);
     }
 
     return (
