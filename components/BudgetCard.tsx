@@ -12,9 +12,9 @@ interface SetBudgetFn {
 
 type BudgetCardProps = BudgetDTO & SetBudgetFn
 
-const BudgetCard = ({ id, name, rent, monthlyFood, metroCard, customFields, setBudgets }: BudgetCardProps) => {
+const BudgetCard = ({ id, bills, internet, name, rent, monthlyFood, metroCard, customFields, total, setBudgets }: BudgetCardProps) => {
 
-    const total: number = rent + monthlyFood + metroCard + customFields.reduce((acc, curr) => acc + curr.value, 0);
+    // const total: number = rent + monthlyFood + metroCard + customFields.reduce((acc, curr) => acc + curr.value, 0);
 
     const deleteBudget = () => {
         if (id) {
@@ -24,7 +24,7 @@ const BudgetCard = ({ id, name, rent, monthlyFood, metroCard, customFields, setB
     }
 
     return (
-        <div className="relative w-[250px] p-4 flex flex-col justify-start items-start gap-2 bg-accent border rounded">
+        <div className="relative w-[250px] p-4 flex flex-col justify-start items-start gap-2 shadow-md border rounded">
             <Image
                 src={DeleteBtn}
                 alt=""
@@ -35,6 +35,8 @@ const BudgetCard = ({ id, name, rent, monthlyFood, metroCard, customFields, setB
             <p>Alquiler: {rent}€</p>
             <p>Comida: {monthlyFood}€</p>
             <p>Abono de metro: {metroCard}€</p>
+            <p>Facturas (agua/luz/gas): {bills}€</p>
+            <p>Internet: {internet}€</p>
             {
                 customFields.map((field, i) => {
                     return <p key={i}>{field.label}: {field.value}€</p>

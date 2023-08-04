@@ -35,7 +35,10 @@ export function BudgetForm() {
             rent: 0,
             metroCard: 0,
             monthlyFood: 0,
-            customFields: []
+            customFields: [],
+            internet: 10,
+            bills: 50,
+            total: 0
         },
     });
 
@@ -45,8 +48,19 @@ export function BudgetForm() {
     });
 
     function onSubmit(values: z.infer<typeof BudgetSchema>) {
-        form.reset();
+        const sum: number = Object.values(values).reduce((acc: number, curr: any) => {
+            if (typeof curr === "number") {
+                return acc + curr
+            } else if (typeof curr === "object") {
+                return acc + curr.reduce((a: number, b: any) => a + b.value, 0);
+            } else {
+                return acc
+            }
+        }, 0);
+        values.total = sum;
+
         addDoc(collection(db, "budgets"), values);
+        form.reset();
     }
 
     return (
@@ -107,6 +121,40 @@ export function BudgetForm() {
                     render={({ field }) => (
                         <FormItem>
                             <FormLabel>Comida</FormLabel>
+                            <Input
+                                type="number"
+                                {...field}
+                                onChange={(e) => field.onChange(Number(e.target.value))}
+                                min={0}
+                                value={field.value.toString()}
+                            />
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
+                <FormField
+                    control={form.control}
+                    name="bills"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Facturas (agua/luz/gas)</FormLabel>
+                            <Input
+                                type="number"
+                                {...field}
+                                onChange={(e) => field.onChange(Number(e.target.value))}
+                                min={0}
+                                value={field.value.toString()}
+                            />
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
+                <FormField
+                    control={form.control}
+                    name="internet"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Internet</FormLabel>
                             <Input
                                 type="number"
                                 {...field}

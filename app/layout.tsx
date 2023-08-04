@@ -17,11 +17,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${inter.className} bg-background`}>
+      <body className={inter.className}>
 
         <NavMenu />
 
-        <main className='pt-24 px-6'>
+        <main className='pt-24 px-6 pb-6'>
           {children}
         </main>
 
