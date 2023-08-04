@@ -22,24 +22,16 @@ import NewExpenseModal from "./NewExpenseModal"
 import { Label } from "./ui/label"
 import { addDoc, collection } from "firebase/firestore"
 import { db } from "@/firebase/config"
-
-const formSchema = z.object({
-    rent: z.number(),
-    metroCard: z.number(),
-    monthlyFood: z.number(),
-    customFields: z.object({
-        label: z.string(),
-        value: z.number(),
-    }).array(),
-});
+import { BudgetSchema } from "@/interfaces/Budget"
 
 export function BudgetForm() {
 
     const [newFields, setNewFields] = useState(null);
 
-    const form = useForm<z.infer<typeof formSchema>>({
-        resolver: zodResolver(formSchema),
+    const form = useForm<z.infer<typeof BudgetSchema>>({
+        resolver: zodResolver(BudgetSchema),
         defaultValues: {
+            name: "",
             rent: 0,
             metroCard: 0,
             monthlyFood: 0,
@@ -52,49 +44,63 @@ export function BudgetForm() {
         control: form.control
     });
 
-    function onSubmit(values: z.infer<typeof formSchema>) {
-        console.log(values);
-        // addDoc(collection(db, "budgets"), values);
+    function onSubmit(values: z.infer<typeof BudgetSchema>) {
+        form.reset();
+        addDoc(collection(db, "budgets"), values);
     }
 
     return (
         <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-                <FormField
-                    control={form.control}
-                    name="rent"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Alquiler</FormLabel>
-                            <Slider
-                                onValueChange={(value) => field.onChange(Number(...value))}
-                                defaultValue={[field.value]}
-                                value={[field.value]}
-                                max={1000}
-                                min={0}
-                                step={25}
-                            />
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-                <FormField
-                    control={form.control}
-                    name="rent"
-                    render={({ field }) => (
-                        <FormItem>
-                            <Input
-                                type="number"
-                                {...field}
-                                onChange={(e) => field.onChange(Number(e.target.value))}
-                                min={0}
-                                max={1000}
-                                value={field.value.toString()}
-                            />
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
+            <form onSubmit={form.handleSubmit(onSubmit)} className="max-w-[400px] grow space-y-8">
+                <div className="flex flex-col justify-start items-start gap-4">
+                    <FormField
+                        control={form.control}
+                        name="name"
+                        render={({ field }) => (
+                            <FormItem className="w-full">
+                                <FormLabel>Nombre del presupuesto</FormLabel>
+                                <Input {...field} />
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                    <FormField
+                        control={form.control}
+                        name="rent"
+                        render={({ field }) => (
+                            <FormItem className="w-full">
+                                <FormLabel>Alquiler</FormLabel>
+                                <Slider
+                                    onValueChange={(value) => field.onChange(Number(...value))}
+                                    defaultValue={[field.value]}
+                                    value={[field.value]}
+                                    max={1000}
+                                    min={0}
+                                    step={25}
+                                />
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                    <FormField
+                        control={form.control}
+                        name="rent"
+                        render={({ field }) => (
+                            <FormItem className="w-full">
+                                <Input
+                                    type="number"
+                                    {...field}
+                                    onChange={(e) => field.onChange(Number(e.target.value))}
+                                    min={0}
+                                    max={1000}
+                                    value={field.value.toString()}
+                                />
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                </div>
+
                 <FormField
                     control={form.control}
                     name="monthlyFood"
