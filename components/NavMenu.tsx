@@ -18,15 +18,15 @@ import { usePathname } from "next/navigation";
 import Link from "next/link";
 
 interface WindowSize {
-    width: number,
-    height: number
+    width: number | null,
+    height: number | null
 }
 
 const NavMenu = () => {
 
     const [windowSize, setWindowSize] = useState<WindowSize>({
-        width: 0,
-        height: 0
+        width: null,
+        height: null
     });
 
     const pathName = usePathname();
@@ -46,7 +46,7 @@ const NavMenu = () => {
     return (
         <div>
             {
-                windowSize.width < 768 ?
+                windowSize.width && windowSize.width < 768 ?
                     <Sheet>
                         <SheetTrigger className='absolute right-0 top-0 p-4'>
                             <Image src={HamburgerBtn} alt='' />
