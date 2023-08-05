@@ -21,7 +21,7 @@ export default function RootLayout({
 
         <NavMenu />
 
-        <main className='pt-24 px-6 pb-6'>
+        <main className='py-10 px-6 lg:pt-28'>
           {children}
         </main>
 

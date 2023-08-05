@@ -4,7 +4,6 @@ import { useEffect, useState } from "react"
 import {
     Sheet,
     SheetContent,
-    SheetDescription,
     SheetHeader,
     SheetTitle,
     SheetTrigger,
@@ -13,7 +12,6 @@ import {
 import Image from 'next/image';
 import HamburgerBtn from "../assets/hamburger-btn.svg"
 import NavLink from "./NavLink";
-import { Button } from "./ui/button";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 
@@ -46,7 +44,7 @@ const NavMenu = () => {
     return (
         <div>
             {
-                windowSize.width && windowSize.width < 768 ?
+                windowSize.width && windowSize.width < 1024 ?
                     <Sheet>
                         <SheetTrigger className='absolute right-0 top-0 p-4'>
                             <Image src={HamburgerBtn} alt='' />

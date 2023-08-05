@@ -45,17 +45,19 @@ const BudgetDisplay = () => {
                     DES
                 </Button>
             </div>
-            <div className="w-full flex flex-wrap justify-start items-start gap-4">
+            <div className="w-full flex flex-wrap justify-center  items-start gap-4">
                 {
                     loading ?
-                    <div className="w-full mt-20 flex justify-center items-center">
-                        <LoadingSpinner />
-                    </div>
+                        <div className="w-full mt-20 flex justify-center items-center">
+                            <LoadingSpinner />
+                        </div>
                         :
                         budgets.length > 0 ?
-                            budgets.sort((a, b) => ascOrder ? a.total - b.total : b.total - a.total).map(budget => {
-                                return <BudgetCard key={budget.id} setBudgets={setBudgets} {...budget} />
-                            })
+                            budgets
+                                .sort((a, b) => ascOrder ? a.total - b.total : b.total - a.total)
+                                .map(budget => {
+                                    return <BudgetCard key={budget.id} setBudgets={setBudgets} {...budget} />
+                                })
                             :
                             <p>No budgets saved...</p>
                 }

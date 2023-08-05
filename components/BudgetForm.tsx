@@ -1,14 +1,11 @@
 "use client"
 
-import Link from "next/link"
 import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod"
 
 import { Button } from "@/components/ui/button"
 import {
     Form,
-    FormControl,
-    FormDescription,
     FormField,
     FormItem,
     FormLabel,
@@ -17,16 +14,11 @@ import {
 import { Input } from "@/components/ui/input"
 import { Slider } from "@/components/ui/slider"
 import { useForm, useFieldArray } from "react-hook-form"
-import { useState } from "react"
-import NewExpenseModal from "./NewExpenseModal"
-import { Label } from "./ui/label"
 import { addDoc, collection } from "firebase/firestore"
 import { db } from "@/firebase/config"
 import { BudgetSchema } from "@/interfaces/Budget"
 
 export function BudgetForm() {
-
-    const [newFields, setNewFields] = useState(null);
 
     const form = useForm<z.infer<typeof BudgetSchema>>({
         resolver: zodResolver(BudgetSchema),
@@ -65,19 +57,19 @@ export function BudgetForm() {
 
     return (
         <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="max-w-[400px] grow space-y-8">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="max-w-[400px] grow grid grid-cols-1 gap-y-6 lg:max-w-[800px] lg:grid-cols-2 lg:gap-x-16">
+                <FormField
+                    control={form.control}
+                    name="name"
+                    render={({ field }) => (
+                        <FormItem className="w-full">
+                            <FormLabel>Nombre del presupuesto</FormLabel>
+                            <Input {...field} />
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
                 <div className="flex flex-col justify-start items-start gap-4">
-                    <FormField
-                        control={form.control}
-                        name="name"
-                        render={({ field }) => (
-                            <FormItem className="w-full">
-                                <FormLabel>Nombre del presupuesto</FormLabel>
-                                <Input {...field} />
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
                     <FormField
                         control={form.control}
                         name="rent"
@@ -183,64 +175,63 @@ export function BudgetForm() {
                         </FormItem>
                     )}
                 />
-                {/* <div>
-                    <NewExpenseModal setNewFields={setNewFields} />
-                </div> */}
-                <div className="flex flex-col justify-start items-start gap-4">
-                    {fields.map((field, index) => {
-                        return (
-                            <div key={index} className="flex flex-col jsutify-start items-start gap-4">
-                                <FormField
-                                    control={form.control}
-                                    name={`customFields.${index}.label`}
-                                    render={({ field }) => (
-                                        <FormItem>
-                                            <FormLabel>Nombre del gasto</FormLabel>
-                                            <Input
-                                                type="text"
-                                                {...field}
-                                            />
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}
-                                />
-                                <FormField
-                                    control={form.control}
-                                    name={`customFields.${index}.value`}
-                                    render={({ field }) => (
-                                        <FormItem>
-                                            <FormLabel>Cantidad</FormLabel>
-                                            <Input
-                                                type="number"
-                                                {...field}
-                                                onChange={(e) => field.onChange(Number(e.target.value))}
-                                                value={field.value.toString()}
-                                            />
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}
-                                />
-                                <Button
-                                    type="button"
-                                    variant={"destructive"}
-                                    onClick={() => remove(index)}
-                                    className="text-xs px-2 py-1"
-                                >
-                                    Eliminar este gasto
-                                </Button>
-                            </div>
-                        )
-                    })}
+                {fields.map((field, index) => {
+                    return (
+                        <div key={index} className="flex flex-col jsutify-start items-start gap-4">
+                            <FormField
+                                control={form.control}
+                                name={`customFields.${index}.label`}
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Nombre del gasto</FormLabel>
+                                        <Input
+                                            type="text"
+                                            {...field}
+                                        />
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name={`customFields.${index}.value`}
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Cantidad</FormLabel>
+                                        <Input
+                                            type="number"
+                                            {...field}
+                                            onChange={(e) => field.onChange(Number(e.target.value))}
+                                            value={field.value.toString()}
+                                        />
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <Button
+                                type="button"
+                                variant={"destructive"}
+                                onClick={() => remove(index)}
+                                className="text-xs px-2 py-1"
+                            >
+                                Eliminar este gasto
+                            </Button>
+                        </div>
+                    )
+                })}
+                <div className="lg:col-span-2">
                     <Button
                         type="button"
                         variant={"green"}
+                        className="block mr-auto"
                         onClick={() => append({ label: "", value: 0 })}
                     >
                         Nuevo gasto
                     </Button>
                 </div>
-
-                <Button type="submit" className="block ml-auto">Guardar</Button>
+                <div className="lg:col-span-2">
+                    <Button type="submit" className="block ml-auto">Guardar</Button>
+                </div>
             </form>
         </Form>
     )
